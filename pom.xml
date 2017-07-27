@@ -19,6 +19,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <vaadin.version>8.1.0</vaadin.version>
+        <docker.image.prefix>springboot</docker.image.prefix>
     </properties>
     <repositories>
         <repository>
@@ -75,6 +76,25 @@
                     <fork>true</fork>
                 </configuration>
             </plugin>
-        </plugins>
+            <plugin> 
+                <groupId>com.spotify</groupId>  
+                <artifactId>docker-maven-plugin</artifactId>  
+                <version>1.0.0</version>                  
+                <configuration>
+                    <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                    <dockerDirectory>src/main/docker</dockerDirectory>
+                    <imageTags>
+                        <imageTag>${project.version}</imageTag>
+                    </imageTags>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+        </plugins>        
     </build>
 </project>
