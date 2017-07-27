@@ -13,6 +13,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +40,24 @@ public class TechnologiesView extends VerticalLayout implements View {
         mainLayout.removeAllComponents();
         addComponent(mainLayout);
         for (TechnologyHeader header : service.findAll()) {
-            HorizontalLayout hl = new HorizontalLayout();
-            hl.addComponent(new Label(header.getName()));
+            Panel pnlHeader = new Panel();
+            pnlHeader.setContent(new Label(header.getName()));
+            mainLayout.addComponent(pnlHeader);
+            //HorizontalLayout hl = new HorizontalLayout();
+            //hl.addComponent(new Label(header.getName()));
             VerticalLayout vl = new VerticalLayout();
-            hl.addComponent(vl);
+            //hl.addComponent(vl);
             for (TechnologyDetail detail : header.getItems()) {
-                vl.addComponent(new TextArea(detail.getName(), detail.getDescription()));
+                Panel pnlDetail = new Panel(detail.getName());
+                TextArea ta = new TextArea(); //"",  detail.getDescription());
+                ta.setValue(detail.getDescription());
+                pnlDetail.setContent(ta);
+                mainLayout.addComponent(pnlDetail);
+                ta.setSizeFull();
+                ta.setReadOnly(true);
+                //vl.addComponent(ta);
             }
-            mainLayout.addComponent(hl);
+            //mainLayout.addComponent(hl);
         }        
     }
 
