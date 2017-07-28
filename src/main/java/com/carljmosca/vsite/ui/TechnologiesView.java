@@ -8,10 +8,14 @@ package com.carljmosca.vsite.ui;
 import com.carljmosca.vsite.data.TechnologyDetail;
 import com.carljmosca.vsite.data.TechnologyHeader;
 import com.carljmosca.vsite.service.TechnologyService;
+import com.vaadin.data.HasValue;
+import com.vaadin.data.HasValue.ValueChangeListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
@@ -29,35 +33,46 @@ public class TechnologiesView extends VerticalLayout implements View {
     @Autowired
     TechnologyService service;
     private final VerticalLayout mainLayout;
-    
+    private final VerticalLayout itemsLayout;
+
     public TechnologiesView() {
         mainLayout = new VerticalLayout();
+        itemsLayout = new VerticalLayout();
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        mainLayout.removeAllComponents();
         addComponent(mainLayout);
-        for (TechnologyHeader header : service.findAll()) {
+        HorizontalLayout headerLayout = new HorizontalLayout();
+        mainLayout.addComponent(headerLayout);
+        mainLayout.addComponent(itemsLayout);
+        TextField teSearch = new TextField("", (HasValue.ValueChangeEvent<String> searchEvent) -> {
+            refresh(searchEvent.getValue());
+        });
+        teSearch.setPlaceholder("search");
+        headerLayout.addComponent(teSearch);
+        refresh("");
+    }
+
+    private void refresh(String search) {
+        itemsLayout.removeAllComponents();
+        service.findAll(search).forEach((header) -> {
             Panel pnlHeader = new Panel();
             pnlHeader.setContent(new Label(header.getName()));
-            mainLayout.addComponent(pnlHeader);
-            //HorizontalLayout hl = new HorizontalLayout();
-            //hl.addComponent(new Label(header.getName()));
+            itemsLayout.addComponent(pnlHeader);
             VerticalLayout vl = new VerticalLayout();
-            //hl.addComponent(vl);
-            for (TechnologyDetail detail : header.getItems()) {
+            header.getItems().stream().map((detail) -> {
                 Panel pnlDetail = new Panel(detail.getName());
-                TextArea ta = new TextArea(); //"",  detail.getDescription());
+                TextArea ta = new TextArea();
                 ta.setValue(detail.getDescription());
                 pnlDetail.setContent(ta);
-                mainLayout.addComponent(pnlDetail);
+                itemsLayout.addComponent(pnlDetail);
                 ta.setSizeFull();
+                return ta;
+            }).forEachOrdered((ta) -> {
                 ta.setReadOnly(true);
-                //vl.addComponent(ta);
-            }
-            //mainLayout.addComponent(hl);
-        }        
+            });
+        });
     }
 
 }

@@ -33,40 +33,52 @@ public class TechnologyService {
 
     public TechnologyService() {
         list = new ArrayList<>();
- 
     }
 
-    public List<TechnologyHeader> findAll() {
-        read();
+    public List<TechnologyHeader> findAll(String search) {
+        read(search);
         return list;
     }
 
-    private void read() {
+    private void read(String search) {
         list.clear();
 
         JSONParser parser = new JSONParser();
+        if (search == null) {
+            search = "";
+        }
+        search = search.toLowerCase();
         try {
-            JSONArray jsonArray = (JSONArray) parser.parse(new FileReader(directory + "/technologies.json"));
+            JSONArray jsonArray = (JSONArray)parser.parse(new FileReader(
+                    directory + "/technologies.json"));
             for (Object o : jsonArray) {
                 JSONObject jsonObject = (JSONObject) o;
-
                 TechnologyHeader tHeader = new TechnologyHeader();
                 tHeader.setName((String) jsonObject.get("name"));
                 JSONArray items = (JSONArray) jsonObject.get("items");
                 if (items != null) {
                     for (Object o2 : items) {
                         JSONObject item = (JSONObject) o2;
-                        TechnologyDetail technologyDetail = new TechnologyDetail();
-                        technologyDetail.setName((String) item.get("name"));
-                        technologyDetail.setDescription((String) item.get("description"));
-                        tHeader.getItems().add(technologyDetail);
+                        String name = 
+                                item.get("name") != null ? (String)item.get("name") : "";
+                        String description = 
+                                item.get("description") != null ? (String)item.get("description") : "";
+                        TechnologyDetail tDetail = new TechnologyDetail(name, description);
+                        if (search.isEmpty()
+                                || name.toLowerCase().contains(search)
+                                || description.toLowerCase().contains(search)) {
+                            tHeader.getItems().add(tDetail);
+                        }
                     }
                 }
-                list.add(tHeader);
+                if (!tHeader.getItems().isEmpty()) {
+                    list.add(tHeader);
+                }
             }
         } catch (IOException ex) {
         } catch (ParseException ex) {
-            Logger.getLogger(TechnologyService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(
+                    TechnologyService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

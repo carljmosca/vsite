@@ -31,8 +31,8 @@ public class VSiteUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         SideMenu sideMenu = new SideMenu();
-        sideMenu.setCaption("Test");
-        sideMenu.setDescription("Test Desc");
+        //sideMenu.setCaption("Test");
+        //sideMenu.setDescription("Test Desc");
         setContent(sideMenu);
         Navigator navigator = HistoryApiNavigatorFactory.createHistoryApiNavigator(this, sideMenu);
         navigator.addProvider(springViewProvider);

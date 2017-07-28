@@ -16,6 +16,14 @@ public class TechnologyDetail implements Serializable {
     private String name;
     private String description;
 
+    public TechnologyDetail() {
+    }
+    
+    public TechnologyDetail(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public String getName() {
         return name;
     }
