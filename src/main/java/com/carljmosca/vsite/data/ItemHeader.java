@@ -13,16 +13,18 @@ import java.util.List;
  *
  * @author moscac
  */
-public class TechnologyHeader implements Serializable {
+public class ItemHeader implements Serializable {
 
     private int index;
     private String name;
-    private List<TechnologyDetail> items;
+    private final List<ItemDetail> items;
+    private String image;
 
-    public TechnologyHeader() {
+    public ItemHeader() {
         items = new ArrayList<>();
+        image = "";
     }
-    
+
     public int getIndex() {
         return index;
     }
@@ -39,8 +41,18 @@ public class TechnologyHeader implements Serializable {
         this.name = name;
     }
 
-    public List<TechnologyDetail> getItems() {
+    public List<ItemDetail> getItems() {
         return items;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        if (image != null) {
+            this.image = image;
+        }
     }
 
 }

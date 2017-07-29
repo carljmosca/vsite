@@ -5,11 +5,8 @@
  */
 package com.carljmosca.vsite.ui;
 
-import com.carljmosca.vsite.data.TechnologyDetail;
-import com.carljmosca.vsite.data.TechnologyHeader;
-import com.carljmosca.vsite.service.TechnologyService;
+import com.carljmosca.vsite.service.ItemService;
 import com.vaadin.data.HasValue;
-import com.vaadin.data.HasValue.ValueChangeListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
@@ -31,7 +28,7 @@ public class TechnologiesView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "TECHNOLOGIES";
     public static final String VIEW_DESCRIPTION = "Technologies";
     @Autowired
-    TechnologyService service;
+    ItemService service;
     private final VerticalLayout mainLayout;
     private final VerticalLayout itemsLayout;
 
@@ -43,7 +40,7 @@ public class TechnologiesView extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         addComponent(mainLayout);
-        HorizontalLayout headerLayout = new HorizontalLayout();
+        VerticalLayout headerLayout = new VerticalLayout();
         mainLayout.addComponent(headerLayout);
         mainLayout.addComponent(itemsLayout);
         TextField teSearch = new TextField("", (HasValue.ValueChangeEvent<String> searchEvent) -> {
@@ -56,7 +53,7 @@ public class TechnologiesView extends VerticalLayout implements View {
 
     private void refresh(String search) {
         itemsLayout.removeAllComponents();
-        service.findAll(search).forEach((header) -> {
+        service.findAll(ItemService.TECHNOLOGIES_ITEM_FILE, search).forEach((header) -> {
             Panel pnlHeader = new Panel();
             pnlHeader.setContent(new Label(header.getName()));
             itemsLayout.addComponent(pnlHeader);

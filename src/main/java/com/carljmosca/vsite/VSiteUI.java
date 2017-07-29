@@ -10,6 +10,7 @@ import com.carljmosca.vsite.ui.IntroductionView;
 import com.carljmosca.vsite.ui.ProjectsView;
 import com.carljmosca.vsite.ui.TechnologiesView;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
@@ -34,6 +35,7 @@ public class VSiteUI extends UI {
         //sideMenu.setCaption("Test");
         //sideMenu.setDescription("Test Desc");
         setContent(sideMenu);
+        Responsive.makeResponsive(sideMenu);
         Navigator navigator = HistoryApiNavigatorFactory.createHistoryApiNavigator(this, sideMenu);
         navigator.addProvider(springViewProvider);
 

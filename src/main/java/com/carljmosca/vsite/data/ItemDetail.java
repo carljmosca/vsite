@@ -6,20 +6,25 @@
 package com.carljmosca.vsite.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author moscac
  */
-public class TechnologyDetail implements Serializable {
+public class ItemDetail implements Serializable {
 
     private String name;
     private String description;
+    private final List<ItemReference> references;
 
-    public TechnologyDetail() {
+    public ItemDetail() {
+        this.references = new ArrayList<>();
     }
     
-    public TechnologyDetail(String name, String description) {
+    public ItemDetail(String name, String description) {
+        this();
         this.name = name;
         this.description = description;
     }
@@ -39,6 +44,9 @@ public class TechnologyDetail implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
+    public List<ItemReference> getReferences() {
+        return references;
+    }
     
 }

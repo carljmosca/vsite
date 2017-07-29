@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  * @author moscac
  */
-public class TechnologyReference implements Serializable {
+public class ItemReference implements Serializable {
 
     private String description;
     private String url;
